@@ -5,7 +5,7 @@ import {
   getImageWithTextById,
   updateImageWithText,
   deleteImageWithText,
-} from "../imageWithText/controller/index.js";
+} from "./controller/index";
 
 const router = express.Router();
 
