@@ -1,7 +1,8 @@
-import ImageWithText from "../../../model/imageWithText/index.js";
-import { sendResponse, dynamicSectionId, cleanRequestFields } from "../../../middlewares/helper.js";
+import ImageWithText from "../../../model/imageWithText/index";
+import { sendResponse, dynamicSectionId, cleanRequestFields } from "../../../middlewares/helper";
+import { Request, Response } from "express";
 
-export const createImageWithText = async (req, res) => {
+export const createImageWithText = async (req:Request, res:Response) => {
   // console.log("req.body__", req.body);
   try {
     const cleanedData = cleanRequestFields(req.body);
@@ -22,7 +23,7 @@ export const createImageWithText = async (req, res) => {
   }
 };
 
-export const getAllImageWithTextSections = async (req, res) => {
+export const getAllImageWithTextSections = async (req:Request, res:Response) => {
   try {
     const sections = await ImageWithText.find();
     return sendResponse(res, 200, true, "Sections retrieved successfully", sections);
@@ -31,7 +32,7 @@ export const getAllImageWithTextSections = async (req, res) => {
   }
 };
 
-export const getImageWithTextById = async (req, res) => {
+export const getImageWithTextById = async (req:Request, res:Response) => {
   try {
     const section = await ImageWithText.findById(req.params.id);
     if (!section) {
@@ -43,7 +44,7 @@ export const getImageWithTextById = async (req, res) => {
   }
 };
 
-export const updateImageWithText = async (req, res) => {
+export const updateImageWithText = async (req:Request, res:Response) => {
   try {
     const { heading, imageUrl, textHeading, description, alignment } = req.body;
     const updatedSection = await ImageWithText.findByIdAndUpdate(
@@ -61,7 +62,7 @@ export const updateImageWithText = async (req, res) => {
   }
 };
 
-export const deleteImageWithText = async (req, res) => {
+export const deleteImageWithText = async (req:Request, res:Response) => {
   try {
     const deletedSection = await ImageWithText.findByIdAndDelete(req.params.id);
     if (!deletedSection) {
