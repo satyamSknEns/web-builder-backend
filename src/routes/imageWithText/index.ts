@@ -10,7 +10,7 @@ import {
 const router = express.Router();
 
 router.post("/", createImageWithText); 
-router.get("/", getAllImageWithTextSections); 
+router.get("/all-section", getAllImageWithTextSections); 
 router.get("/:id", getImageWithTextById); 
 router.put("/:id", updateImageWithText); 
 router.delete("/:id", deleteImageWithText); 
