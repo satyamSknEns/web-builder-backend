@@ -21,7 +21,7 @@ const imageWithTextSchema = new mongoose.Schema({
         required: true,
         default: "https://example.com/default-image.jpg",
     },
-    textHeading: {
+    title: {
         type: String,
         required: true,
         default: "Image with text",
