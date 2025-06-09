@@ -1,9 +1,5 @@
 import ImageWithText from "../../../model/imageWithText/index";
-import {
-  sendResponse,
-  dynamicSectionId,
-  cleanRequestFields,
-} from "../../../middlewares/helper";
+import { sendResponse, dynamicSectionId, cleanRequestFields, } from "../../../middlewares/helper";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 
