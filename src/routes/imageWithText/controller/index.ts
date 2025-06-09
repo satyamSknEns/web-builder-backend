@@ -127,9 +127,7 @@ export const updateImageWithText = async (req: Request, res: Response) => {
 export const deleteImageWithText = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  if (!id) {
-    return sendResponse(res, 400, false, "Section Id is required");
-  }
+  if (!id) { return sendResponse(res, 400, false, "Section Id is required"); }
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return sendResponse(res, 400, false, "Invalid ID format");
