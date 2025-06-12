@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import MultiColumnSection, { IColumn } from "../../../model/multiColumn";
+import ColumnSection, { IColumn } from "../../../model/multiColumn";
 import {
   sendResponse,
   dynamicSectionId,
@@ -38,7 +38,7 @@ export const createColumnSection = async (req: Request, res: Response) => {
 
     const sectionId = dynamicSectionId(`${columnCount}-${name}`);
 
-    const newSection = new MultiColumnSection({
+    const newSection = new ColumnSection({
       sectionId,
       name,
       heading,
@@ -70,7 +70,7 @@ export const createColumnSection = async (req: Request, res: Response) => {
 
 export const getAllSections = async (req: Request, res: Response) => {
   try {
-    const allSections = await MultiColumnSection.find().sort({ createdAt: -1 });
+    const allSections = await ColumnSection.find().sort({ createdAt: -1 });
     return sendResponse(
       res,
       200,
@@ -100,7 +100,7 @@ export const getSectionById = async (req: Request, res: Response) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return sendResponse(res, 400, false, "Invalid ID format");
     }
-    const section = await MultiColumnSection.findById(id);
+    const section = await ColumnSection.findById(id);
     if (!section) {
       sendResponse(res, 404, false, "Section not found");
     }
@@ -127,7 +127,7 @@ export const updateSectionById = async (req: Request, res: Response) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return sendResponse(res, 400, false, "Invalid ID format");
     }
-    const section = await MultiColumnSection.findById(id);
+    const section = await ColumnSection.findById(id);
     if (!section) {
       return sendResponse(res, 404, false, "Section not found");
     }
@@ -200,18 +200,12 @@ export const deleteSectionById = async (req: Request, res: Response) => {
     return sendResponse(res, 400, false, "Invalid ID format");
   }
   try {
-    const deletedSection = await MultiColumnSection.findByIdAndDelete(id);
+    const deletedSection = await ColumnSection.findByIdAndDelete(id);
     if (!deletedSection) {
       return sendResponse(res, 404, false, "Section not found");
     }
 
-    sendResponse(
-      res,
-      200,
-      true,
-      "Section deleted successfully",
-      deletedSection
-    );
+    sendResponse(res, 200, true, "Section deleted successfully");
   } catch (error) {
     return sendResponse(
       res,

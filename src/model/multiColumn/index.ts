@@ -5,7 +5,7 @@ export interface IColumn {
   text: string;
 }
 
-export interface IMultiColumnSection extends Document {
+export interface IColumnSection extends Document {
   sectionId: string;
   name: string;
   heading: string;
@@ -29,7 +29,7 @@ const columnSchema = new Schema<IColumn>({
   },
 });
 
-const columnSectionSchema = new Schema<IMultiColumnSection>(
+const columnSectionSchema = new Schema<IColumnSection>(
   {
     sectionId: {
       type: String,
@@ -62,7 +62,7 @@ const columnSectionSchema = new Schema<IMultiColumnSection>(
       type: [columnSchema],
       required: true,
       validate: {
-        validator(this: IMultiColumnSection, val: IColumn[]) {
+        validator(this: IColumnSection, val: IColumn[]) {
           return val.length === this.columnCount;
         },
         message: (props: any) =>
@@ -75,9 +75,9 @@ const columnSectionSchema = new Schema<IMultiColumnSection>(
   }
 );
 
-const MultiColumnSection: Model<IMultiColumnSection> = mongoose.model<IMultiColumnSection>(
-  "MultiColumnSection",
+const ColumnSection: Model<IColumnSection> = mongoose.model<IColumnSection>(
+  "ColumnSection",
   columnSectionSchema
 );
 
-export default MultiColumnSection;
+export default ColumnSection;

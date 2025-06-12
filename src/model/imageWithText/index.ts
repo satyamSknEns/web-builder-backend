@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const imageWithTextSchema = new mongoose.Schema({
+const imageTextSectionSchema = new mongoose.Schema({
     sectionId: {
         type: String,
         unique: true,
@@ -38,6 +38,6 @@ const imageWithTextSchema = new mongoose.Schema({
     },
 });
 
-const ImageWithText = mongoose.model("ImageWithText", imageWithTextSchema);
+const ImageTextSection = mongoose.model("ImageTextSection", imageTextSectionSchema);
 
-export default ImageWithText;
+export default ImageTextSection;
