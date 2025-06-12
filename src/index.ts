@@ -20,7 +20,7 @@ server.get("/", (req, res) => {
   res.send(`Server is running locally on Port ${PORT}`);
 });
 
-server.use(routes);
+server.use('/api',routes);
 server.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}`);
 });
