@@ -12,6 +12,8 @@ export interface IColumnSection extends Document {
   columnCount: number;
   columnLayout: "horizontal" | "vertical";
   columns: IColumn[];
+  isDeleted: boolean;
+  deletedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -68,6 +70,14 @@ const columnSectionSchema = new Schema<IColumnSection>(
         message: (props: any) =>
           `columns.length (${props.value.length}) must match columnCount`,
       },
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false
+    },
+    deletedAt: {
+      type: Date,
+      default: null
     },
   },
   {
