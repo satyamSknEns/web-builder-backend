@@ -10,7 +10,7 @@ import {
 const IMAGE_URL =
   "https://png.pngtree.com/png-clipart/20190619/original/pngtree-vector-picture-icon-png-image_4013511.jpg";
 
-export const createSection = async (req: Request, res: Response) => {
+export const createGallerySection = async (req: Request, res: Response) => {
   try {
     const cleanedData = cleanRequestFields(req.body);
     const name = cleanedData.name || "Gallery Section";
@@ -52,7 +52,7 @@ export const createSection = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllSections = async (_req: Request, res: Response) => {
+export const getAllGallerySections = async (_req: Request, res: Response) => {
   try {
     const sections = await GallerySection.find({ isDeleted: false }).sort({ createdAt: -1 });
     return sendResponse(res, 200, true, "Sections fetched", sections);
@@ -61,11 +61,17 @@ export const getAllSections = async (_req: Request, res: Response) => {
   }
 };
 
-export const getSectionById = async (req: Request, res: Response) => {
+export const getGallerySectionById = async (req: Request, res: Response) => {
   const { id } = req.params;
+
+  if (!id || id.trim() === "") {
+    return sendResponse(res, 400, false, "ID is required");
+  }
+
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return sendResponse(res, 400, false, "Invalid ID");
   }
+
   try {
     const section = await GallerySection.findOne({ _id: id, isDeleted: false });
     if (!section) return sendResponse(res, 404, false, "Section not found or deleted");
@@ -75,11 +81,17 @@ export const getSectionById = async (req: Request, res: Response) => {
   }
 };
 
-export const updateSectionById = async (req: Request, res: Response) => {
+export const updateGallerySectionById = async (req: Request, res: Response) => {
   const { id } = req.params;
+
+  if (!id || id.trim() === "") {
+    return sendResponse(res, 400, false, "ID is required");
+  }
+
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return sendResponse(res, 400, false, "Invalid ID");
   }
+  
   try {
     const cleanedData = cleanRequestFields(req.body);
     const section = await GallerySection.findOne({ _id: id, isDeleted: false });
@@ -118,7 +130,7 @@ export const updateSectionById = async (req: Request, res: Response) => {
   }
 };
 
-export const softDeleteSectionById = async (req: Request, res: Response) => {
+export const softDeleteGallerySectionById = async (req: Request, res: Response) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return sendResponse(res, 400, false, "Invalid ID");
@@ -135,16 +147,16 @@ export const softDeleteSectionById = async (req: Request, res: Response) => {
   }
 };
 
-export const getDeletedSections = async (_req: Request, res: Response) => {
-  try {
-    const deletedSections = await GallerySection.find({ isDeleted: true }).sort({ deletedAt: -1 });
-    return sendResponse(res, 200, true, "Deleted sections fetched", deletedSections);
-  } catch (error) {
-    return sendResponse(res, 500, false, "Fetch failed", error instanceof Error ? error.message : error);
-  }
-};
+// export const getDeletedSections = async (_req: Request, res: Response) => {
+//   try {
+//     const deletedSections = await GallerySection.find({ isDeleted: true }).sort({ deletedAt: -1 });
+//     return sendResponse(res, 200, true, "Deleted sections fetched", deletedSections);
+//   } catch (error) {
+//     return sendResponse(res, 500, false, "Fetch failed", error instanceof Error ? error.message : error);
+//   }
+// };
 
-export const restoreDeletedSectionById = async (req: Request, res: Response) => {
+export const restoreDeletedGallerySectionById = async (req: Request, res: Response) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return sendResponse(res, 400, false, "Invalid ID");

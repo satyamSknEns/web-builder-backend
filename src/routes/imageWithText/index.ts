@@ -1,18 +1,20 @@
 import express from "express";
 import {
-  createImageWithText,
-  getAllImageWithTextSections,
-  getImageWithTextById,
-  updateImageWithText,
-  deleteImageWithText,
+  createImageText,
+  getAllImageTextSections,
+  getImageTextSectionById,
+  updateImageTextSectionById,
+  softDeleteImageTextSectionById,
+  restoreDeletedImageTextSectionById,
 } from "./controller/index";
 
 const router = express.Router();
 
-router.post("/", createImageWithText); 
-router.get("/all-section", getAllImageWithTextSections); 
-router.get("/:id", getImageWithTextById); 
-router.put("/:id", updateImageWithText); 
-router.delete("/:id", deleteImageWithText); 
+router.post("/", createImageText); 
+router.get("/all-sections", getAllImageTextSections); 
+router.get("/:id", getImageTextSectionById); 
+router.put("/update/:id", updateImageTextSectionById); 
+router.delete("/delete/:id", softDeleteImageTextSectionById); 
+router.patch("/restore/:id", restoreDeletedImageTextSectionById);
 
 export default router;

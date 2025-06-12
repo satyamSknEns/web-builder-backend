@@ -68,28 +68,16 @@ export const createColumnSection = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllSections = async (req: Request, res: Response) => {
+export const getAllColumnSections = async (req: Request, res: Response) => {
   try {
-    const allSections = await ColumnSection.find().sort({ createdAt: -1 });
-    return sendResponse(
-      res,
-      200,
-      true,
-      "Sections fetched successfully",
-      allSections
-    );
+    const allSections = await ColumnSection.find({ isDeleted: false }).sort({ createdAt: -1 });
+    return sendResponse(res, 200, true, "Sections fetched successfully", allSections);
   } catch (error) {
-    return sendResponse(
-      res,
-      500,
-      false,
-      "Error fetching section",
-      error instanceof Error ? error.message : error
-    );
+    return sendResponse(res, 500, false, "Error fetching section", error instanceof Error ? error.message : error);
   }
 };
 
-export const getSectionById = async (req: Request, res: Response) => {
+export const getColumnSectionById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -100,36 +88,28 @@ export const getSectionById = async (req: Request, res: Response) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return sendResponse(res, 400, false, "Invalid ID format");
     }
-    const section = await ColumnSection.findById(id);
-    if (!section) {
-      sendResponse(res, 404, false, "Section not found");
-    }
+    const section = await ColumnSection.findOne({ _id: id, isDeleted: false });
+    if (!section) { return sendResponse(res, 404, false, "Section not found or deleted"); }
     sendResponse(res, 200, true, "Section retrieved successfully", section);
   } catch (error) {
-    return sendResponse(
-      res,
-      500,
-      false,
-      "Error fetching section",
-      error instanceof Error ? error.message : error
-    );
+    return sendResponse( res, 500, false, "Error fetching section", error instanceof Error ? error.message : error );
   }
 };
 
-export const updateSectionById = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const cleanedData = cleanRequestFields(req.body);
+export const updateColumnSectionById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const cleanedData = cleanRequestFields(req.body);
 
-    if (!id || id.trim() === "") {
-      return sendResponse(res, 400, false, "Section ID is required");
-    }
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return sendResponse(res, 400, false, "Invalid ID format");
-    }
-    const section = await ColumnSection.findById(id);
+  if (!id || id.trim() === "") {
+    return sendResponse(res, 400, false, "ID is required");
+  }
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return sendResponse(res, 400, false, "Invalid ID");
+  }
+  try {
+    const section = await ColumnSection.findOne({ _id: id, isDeleted: false });
     if (!section) {
-      return sendResponse(res, 404, false, "Section not found");
+      return sendResponse(res, 404, false, "Section not found or deleted");
     }
 
     if ("sectionId" in cleanedData) {
@@ -190,29 +170,51 @@ export const updateSectionById = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteSectionById = async (req: Request, res: Response) => {
+export const softDeleteColumnSectionById = async (req: Request, res: Response) => {
   const { id } = req.params;
-  if (!id) {
-    return sendResponse(res, 400, false, "Section Id is required");
+  if (!id || id.trim() === "") {
+    return sendResponse(res, 400, false, "ID is required");
   }
-
+  
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return sendResponse(res, 400, false, "Invalid ID format");
+    return sendResponse(res, 400, false, "Invalid ID");
   }
-  try {
-    const deletedSection = await ColumnSection.findByIdAndDelete(id);
-    if (!deletedSection) {
-      return sendResponse(res, 404, false, "Section not found");
-    }
 
-    sendResponse(res, 200, true, "Section deleted successfully");
+  try {
+    const section = await ColumnSection.findById(id);
+    if (!section || section.isDeleted) return sendResponse(res, 404, false, "Section not found");
+    section.isDeleted = true;
+    section.deletedAt = new Date();
+    await section.save();
+    return sendResponse(res, 200, true, "Section soft-deleted");
   } catch (error) {
-    return sendResponse(
-      res,
-      500,
-      false,
-      "Section deletion failed",
-      error instanceof Error ? error.message : error
-    );
+    return sendResponse(res, 500, false, "Soft delete failed", error instanceof Error ? error.message : error);
   }
 };
+
+// export const getDeletedColumnSections = async (_req: Request, res: Response) => {
+//   try {
+//     const deletedSections = await ColumnSection.find({ isDeleted: true }).sort({ deletedAt: -1 });
+//     return sendResponse(res, 200, true, "Deleted sections fetched", deletedSections);
+//   } catch (error) {
+//     return sendResponse(res, 500, false, "Fetch failed", error instanceof Error ? error.message : error);
+//   }
+// };
+
+export const restoreDeletedColumnSectionById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return sendResponse(res, 400, false, "Invalid ID");
+  }
+  try {
+    const section = await ColumnSection.findOne({ _id: id, isDeleted: true });
+    if (!section) return sendResponse(res, 404, false, "Section not found");
+    section.isDeleted = false;
+    section.deletedAt = null;
+    await section.save();
+    return sendResponse(res, 200, true, "Deleted section restored", section);
+  } catch (error) {
+    return sendResponse(res, 500, false, "Restore failed", error instanceof Error ? error.message : error);
+  }
+};
+
