@@ -1,4 +1,4 @@
-import ImageWithText from "../../../model/imageWithText/index";
+import ImageTextSection from "../../../model/imageWithText/index";
 import {
   sendResponse,
   dynamicSectionId,
@@ -12,7 +12,7 @@ export const createImageWithText = async (req: Request, res: Response) => {
     const cleanedData = cleanRequestFields(req.body);
     const sectionId = dynamicSectionId(cleanedData.name || "image-with-text");
 
-    const newSection = new ImageWithText({ sectionId, ...cleanedData });
+    const newSection = new ImageTextSection({ sectionId, ...cleanedData });
 
     await newSection.save();
 
@@ -34,7 +34,7 @@ export const getAllImageWithTextSections = async (
   res: Response
 ) => {
   try {
-    const sections = await ImageWithText.find();
+    const sections = await ImageTextSection.find();
     return sendResponse(
       res,
       200,
@@ -59,7 +59,7 @@ export const getImageWithTextById = async (req: Request, res: Response) => {
   }
 
   try {
-    const section = await ImageWithText.findById(id);
+    const section = await ImageTextSection.findById(id);
     if (!section) {
       return sendResponse(res, 404, false, "Section not found");
     }
@@ -96,7 +96,7 @@ export const updateImageWithText = async (req: Request, res: Response) => {
   try {
     const cleanedData = cleanRequestFields(req.body);
     delete cleanedData.sectionId;
-    const updatedSection = await ImageWithText.findByIdAndUpdate(
+    const updatedSection = await ImageTextSection.findByIdAndUpdate(
       id,
       { $set: cleanedData },
       { new: true, runValidators: true }
@@ -135,7 +135,7 @@ export const deleteImageWithText = async (req: Request, res: Response) => {
     return sendResponse(res, 400, false, "Invalid ID format");
   }
   try {
-    const deletedSection = await ImageWithText.findByIdAndDelete(id);
+    const deletedSection = await ImageTextSection.findByIdAndDelete(id);
     if (!deletedSection) {
       return sendResponse(res, 404, false, "Section not found");
     }
