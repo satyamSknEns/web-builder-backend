@@ -34,7 +34,7 @@ const imageTextSectionSchema: Schema<IImageTextSection> = new mongoose.Schema(
     imageUrl: {
       type: String,
       required: true,
-      default: "https://example.com/default-image.jpg",
+      default: "https://png.pngtree.com/png-clipart/20190619/original/pngtree-vector-picture-icon-png-image_4013511.jpg",
     },
     title: {
       type: String,
@@ -66,6 +66,6 @@ const imageTextSectionSchema: Schema<IImageTextSection> = new mongoose.Schema(
 );
 
 const ImageTextSection: Model<IImageTextSection> =
-  mongoose.model<IImageTextSection>("ImageTextSection", imageTextSectionSchema);
+  mongoose.model<IImageTextSection>("Image_Text_Section", imageTextSectionSchema);
 
 export default ImageTextSection;

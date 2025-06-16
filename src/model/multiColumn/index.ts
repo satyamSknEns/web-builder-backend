@@ -86,7 +86,7 @@ const columnSectionSchema = new Schema<IColumnSection>(
 );
 
 const ColumnSection: Model<IColumnSection> = mongoose.model<IColumnSection>(
-  "ColumnSection",
+  "Multi_Column_Section",
   columnSectionSchema
 );
 

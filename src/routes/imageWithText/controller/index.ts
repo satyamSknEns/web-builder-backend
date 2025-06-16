@@ -62,13 +62,13 @@ export const updateImageTextSectionById = async (req: Request, res: Response) =>
   try {
     const cleanedData = cleanRequestFields(req.body);
     delete cleanedData.sectionId;
-    const updatedSection = await ImageTextSection.findByIdAndUpdate(
+    const updatedSection = await ImageTextSection.findOneAndUpdate(
       { _id: id, isDeleted: false },
       { $set: cleanedData },
       { new: true, runValidators: true }
     );
 
-    if (!updatedSection) { return sendResponse(res, 404, false, "Section not found"); }
+    if (!updatedSection) { return sendResponse(res, 404, false, "Section not found or deleted"); }
 
     return sendResponse( res, 200, true, "Section updated successfully", updatedSection );
   } catch (error) {

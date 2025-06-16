@@ -10,9 +10,9 @@ export interface IGallerySection extends Document {
   sectionId: string;
   name: string;
   heading: string;
-  columnCount: number;
-  columnLayout: "horizontal" | "vertical";
-  columns: IGalleryItem[];
+  imageCount: number;
+  galleryLayout: "horizontal" | "vertical";
+  images: IGalleryItem[];
   isDeleted: boolean;
   deletedAt: Date | null;
   createdAt: Date;
@@ -54,27 +54,27 @@ const gallerySectionSchema = new Schema<IGallerySection>(
       required: true,
       default: "Gallery Heading Here",
     },
-    columnCount: {
+    imageCount: {
       type: Number,
       required: true,
-      min: 1,
+      min: 0,
       max: 8,
     },
-    columnLayout: {
+    galleryLayout: {
       type: String,
       enum: ["horizontal", "vertical"],
       required: true,
       default: "horizontal",
     },
-    columns: {
+    images: {
       type: [galleryItemSchema],
       required: true,
       validate: {
         validator(this: IGallerySection, val: IGalleryItem[]) {
-          return val.length === this.columnCount;
+          return val.length === this.imageCount;
         },
         message: (props: any) =>
-          `columns.length (${props.value.length}) must match columnCount`,
+          `images.length (${props.value.length}) must match imageCount`,
       },
     },
     isDeleted: {
@@ -92,7 +92,7 @@ const gallerySectionSchema = new Schema<IGallerySection>(
 );
 
 const GallerySection: Model<IGallerySection> = mongoose.model<IGallerySection>(
-  "GallerySection",
+  "Gallery_Section",
   gallerySectionSchema
 );
 

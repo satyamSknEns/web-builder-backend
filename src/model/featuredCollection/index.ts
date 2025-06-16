@@ -74,6 +74,6 @@ const featuredCollectionSchema = new mongoose.Schema({
   },
 });
 
-const FeaturedCollection = mongoose.model("FeaturedCollection", featuredCollectionSchema);
+const FeaturedCollection = mongoose.model("Featured_Collection", featuredCollectionSchema);
 
 export default FeaturedCollection;
