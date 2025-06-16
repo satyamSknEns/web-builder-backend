@@ -7,42 +7,41 @@ import {
   cleanRequestFields,
 } from "../../../middlewares/helper";
 
-const IMAGE_URL =
-  "https://png.pngtree.com/png-clipart/20190619/original/pngtree-vector-picture-icon-png-image_4013511.jpg";
+const IMAGE_URL = "https://png.pngtree.com/png-clipart/20190619/original/pngtree-vector-picture-icon-png-image_4013511.jpg";
 
 export const createGallerySection = async (req: Request, res: Response) => {
   try {
     const cleanedData = cleanRequestFields(req.body);
     const name = cleanedData.name || "Gallery Section";
     const heading = cleanedData.heading || "Gallery Heading Here";
-    const columnLayout = cleanedData.columnLayout || "horizontal";
-    const columnCount: number = cleanedData.columnCount ?? 2;
+    const galleryLayout = cleanedData.galleryLayout || "horizontal";
+    const imageCount: number = cleanedData.imageCount ?? 2;
 
-    const requestedColumns: IGalleryItem[] = Array.isArray(cleanedData.columns)
-      ? cleanedData.columns
+    const requestedImages: IGalleryItem[] = Array.isArray(cleanedData.images)
+      ? cleanedData.images
       : [];
 
-    let columns: IGalleryItem[] = [...requestedColumns];
+    let images: IGalleryItem[] = [...requestedImages];
 
-    if (columns.length < columnCount) {
-      const missing = columnCount - columns.length;
-      const defaultColumns: IGalleryItem[] = Array.from({ length: missing }, () => ({
+    if (images.length < imageCount) {
+      const missing = imageCount - images.length;
+      const defaultImages: IGalleryItem[] = Array.from({ length: missing }, () => ({
         imageUrl: IMAGE_URL,
         buttonText: "Click Me",
         buttonUrl: "https://example.com",
       }));
-      columns = [...columns, ...defaultColumns];
+      images = [...images, ...defaultImages];
     }
 
-    const sectionId = dynamicSectionId(`${columnCount}-${name}`);
+    const sectionId = dynamicSectionId(`${imageCount}-${name}`);
 
     const newSection = new GallerySection({
       sectionId,
       name,
       heading,
-      columnLayout,
-      columnCount,
-      columns,
+      galleryLayout,
+      imageCount,
+      images,
     });
 
     await newSection.save();
@@ -99,29 +98,29 @@ export const updateGallerySectionById = async (req: Request, res: Response) => {
 
     const name = cleanedData.name || section.name;
     const heading = cleanedData.heading || section.heading;
-    const columnLayout = cleanedData.columnLayout || section.columnLayout;
-    const columnCount: number = cleanedData.columnCount ?? section.columnCount;
-    const requestedColumns: IGalleryItem[] = Array.isArray(cleanedData.columns)
-      ? cleanedData.columns
-      : section.columns;
+    const galleryLayout = cleanedData.galleryLayout || section.galleryLayout;
+    const imageCount: number = cleanedData.imageCount ?? section.imageCount;
+    const requestedImages: IGalleryItem[] = Array.isArray(cleanedData.images)
+      ? cleanedData.images
+      : section.images;
 
-    let columns = [...requestedColumns];
+    let images = [...requestedImages];
 
-    if (columns.length < columnCount) {
-      const missing = columnCount - columns.length;
-      const defaultColumns = Array.from({ length: missing }, () => ({
+    if (images.length < imageCount) {
+      const missing = imageCount - images.length;
+      const defaultImages = Array.from({ length: missing }, () => ({
         imageUrl: IMAGE_URL,
         buttonText: "Click Me",
         buttonUrl: "https://example.com",
       }));
-      columns = [...columns, ...defaultColumns];
+      images = [...images, ...defaultImages];
     }
 
     section.name = name;
     section.heading = heading;
-    section.columnLayout = columnLayout;
-    section.columnCount = columnCount;
-    section.columns = columns;
+    section.galleryLayout = galleryLayout;
+    section.imageCount = imageCount;
+    section.images = images;
 
     await section.save();
     return sendResponse(res, 200, true, "Section updated", section);
