@@ -57,7 +57,7 @@ const gallerySectionSchema = new Schema<IGallerySection>(
     imageCount: {
       type: Number,
       required: true,
-      min: 0,
+      min: 3,
       max: 8,
     },
     galleryLayout: {

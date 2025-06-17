@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { sendResponse } from "../../../middlewares/helper";
+import { sendResponse } from "../../../middleware/helper";
 import mongoose from "mongoose";
 
 export const getAllSections = async (req: Request, res: Response) => {

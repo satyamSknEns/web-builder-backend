@@ -3,7 +3,7 @@ import {
   sendResponse,
   dynamicSectionId,
   cleanRequestFields,
-} from "../../../middlewares/helper";
+} from "../../../middleware/helper";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 

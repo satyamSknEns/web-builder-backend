@@ -1,11 +1,7 @@
+import mongoose from "mongoose";
 import { Response, Request } from "express";
 import ColumnSection, { IColumn } from "../../../model/multiColumn";
-import {
-  sendResponse,
-  dynamicSectionId,
-  cleanRequestFields,
-} from "../../../middlewares/helper";
-import mongoose from "mongoose";
+import { sendResponse, dynamicSectionId, cleanRequestFields, } from "../../../middleware/helper";
 
 const IMAGE_URL =
   "https://png.pngtree.com/png-clipart/20190619/original/pngtree-vector-picture-icon-png-image_4013511.jpg";
