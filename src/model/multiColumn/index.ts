@@ -51,8 +51,8 @@ const columnSectionSchema = new Schema<IColumnSection>(
     columnCount: {
       type: Number,
       required: true,
-      min: 1,
-      max: 5,
+      min: 2,
+      max: 4,
     },
     columnLayout: {
       type: String,

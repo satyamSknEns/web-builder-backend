@@ -1,11 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import GallerySection, { IGalleryItem } from "../../../model/gallery/index";
-import {
-  sendResponse,
-  dynamicSectionId,
-  cleanRequestFields,
-} from "../../../middlewares/helper";
+import { sendResponse, dynamicSectionId, cleanRequestFields, } from "../../../middleware/helper";
 
 const IMAGE_URL = "https://png.pngtree.com/png-clipart/20190619/original/pngtree-vector-picture-icon-png-image_4013511.jpg";
 
@@ -15,7 +11,7 @@ export const createGallerySection = async (req: Request, res: Response) => {
     const name = cleanedData.name || "Gallery Section";
     const heading = cleanedData.heading || "Gallery Heading Here";
     const galleryLayout = cleanedData.galleryLayout || "horizontal";
-    const imageCount: number = cleanedData.imageCount ?? 2;
+    const imageCount: number = cleanedData.imageCount ?? 3;
 
     const requestedImages: IGalleryItem[] = Array.isArray(cleanedData.images)
       ? cleanedData.images
