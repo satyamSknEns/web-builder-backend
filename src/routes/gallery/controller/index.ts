@@ -125,6 +125,20 @@ export const updateGallerySectionById = async (req: Request, res: Response) => {
   }
 };
 
+export const hardDeleteGallerySectionById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return sendResponse(res, 400, false, "Invalid ID");
+  }
+  try {
+    const section = await GallerySection.findByIdAndDelete(id);
+    if (!section) return sendResponse(res, 404, false, "Section not found");
+    return sendResponse(res, 200, true, "Section deleted successfully");
+  } catch (error) {
+    return sendResponse(res, 500, false, "Hard delete failed", error instanceof Error ? error.message : error);
+  }
+};
+
 export const softDeleteGallerySectionById = async (req: Request, res: Response) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {

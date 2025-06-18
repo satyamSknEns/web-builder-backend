@@ -3,6 +3,7 @@ import {
   createGallerySection,
   getAllGallerySections,
   getGallerySectionById,
+  hardDeleteGallerySectionById,
   restoreDeletedGallerySectionById,
   softDeleteGallerySectionById,
   updateGallerySectionById,
@@ -17,7 +18,8 @@ router.post("/", createGallerySection);
 router.get("/all-sections", getAllGallerySections);
 router.get("/:id", getGallerySectionById);
 router.put("/update/:id", updateGallerySectionById);
-router.delete("/delete/:id", softDeleteGallerySectionById);
+router.delete("/soft-delete/:id", softDeleteGallerySectionById);
+router.delete("/hard-delete/:id", hardDeleteGallerySectionById);
 router.patch("/restore/:id", restoreDeletedGallerySectionById);
 // router.get("/trash/list", getDeletedSections);
 // router.post("/batch/delete",batchSoftDeleteSections);
