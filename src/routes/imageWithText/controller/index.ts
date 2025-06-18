@@ -95,6 +95,20 @@ export const softDeleteImageTextSectionById = async (req: Request, res: Response
   }
 };
 
+export const hardDeleteImageTextSectionById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return sendResponse(res, 400, false, "Invalid ID");
+  }
+  try {
+    const section = await ImageTextSection.findByIdAndDelete(id);
+    if (!section) return sendResponse(res, 404, false, "Section not found");
+    return sendResponse(res, 200, true, "Section deleted successfully");
+  } catch (error) {
+    return sendResponse(res, 500, false, "Hard delete failed", error instanceof Error ? error.message : error);
+  }
+};
+
 export const restoreDeletedImageTextSectionById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
